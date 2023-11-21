@@ -5,6 +5,13 @@ Serial myPort;
 float temperature = 0;
 float humidity = 0;
 
+float sumTemperature = 0;
+float sumHumidity = 0;
+int numSamples = 0;
+
+float averageTemperature = 0;
+float averageHumidity = 0;
+
 void setup() {
   size(400, 200);
   String portName = "COM6";  // Cambia esto al puerto correcto
@@ -19,17 +26,17 @@ void draw() {
 
   // Dibuja el gráfico de temperatura
   fill(255, 0, 0);
-  rect(50, height - temperature, 50, temperature);
+  rect(50, height - averageTemperature, 50, averageTemperature);
 
   // Dibuja el gráfico de humedad
   fill(0, 0, 255);
-  rect(150, height - humidity, 50, humidity);
+  rect(150, height - averageHumidity, 50, averageHumidity);
 
   // Muestra los valores
   fill(0);
   textSize(16);
-  text("Temperatura: " + nf(temperature, 2, 1) + " °C", 50, height - temperature - 10);
-  text("Humedad: " + nf(humidity, 2, 1) + " %", 150, height - humidity - 10);
+  text("T: " + nf(averageTemperature, 2, 1) + " °C", 50, height - averageTemperature - 10);
+  text("H: " + nf(averageHumidity, 2, 1) + " %", 150, height - averageHumidity - 10);
 }
 
 void serialEvent(Serial p) {
@@ -40,12 +47,29 @@ void serialEvent(Serial p) {
       String[] keyValue = split(pair, ':');
       if (keyValue.length == 2) {
         if (keyValue[0].equals("T")) {
-          temperature = float(keyValue[1]);
+          sumTemperature += float(keyValue[1]);
+          numSamples++;
         } else if (keyValue[0].equals("H")) {
-          humidity = float(keyValue[1]);
+          sumHumidity += float(keyValue[1]);
         }
       }
     }
-    println("Processing: Datos recibidos - Temperatura=" + temperature + ", Humedad=" + humidity);
+
+    // Calcular promedios
+    if (numSamples > 0) {
+      averageTemperature = sumTemperature / numSamples;
+      averageHumidity = sumHumidity / numSamples;
+    }
+
+    println("Processing: Datos recibidos - Temperatura=" + averageTemperature + ", Humedad=" + averageHumidity);
+
+    // Guardar en archivo
+    saveAveragesToFile();
   }
+}
+
+void saveAveragesToFile() {
+  // Guardar promedios en un archivo
+  String[] lines = {nf(averageTemperature, 2, 1) + "," + nf(averageHumidity, 2, 1)};
+  saveStrings("promedios.txt", lines);
 }
