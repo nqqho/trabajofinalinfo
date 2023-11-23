@@ -1,33 +1,43 @@
-#include <SPI.h>
-#include <MFRC522.h>
+#include <DHT.h>
 
-#define RST_PIN	9    //Pin 9 para el reset del RC522
-#define SS_PIN	10   //Pin 10 para el SS (SDA) del RC522
-MFRC522 mfrc522(SS_PIN, RST_PIN); //Creamos el objeto para el RC522
+#define DHTPIN 10
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+const int LED_TEMPERATURE_PIN = 7;
+const int LED_HUMIDITY_PIN = 6;
 
 void setup() {
-	Serial.begin(9600); //Iniciamos la comunicación  serial
-	SPI.begin();        //Iniciamos el Bus SPI
-	mfrc522.PCD_Init(); // Iniciamos  el MFRC522
-	Serial.println("Lectura del UID");
+  Serial.begin(9600);
+  dht.begin();
+  pinMode(LED_TEMPERATURE_PIN, OUTPUT);
+  pinMode(LED_HUMIDITY_PIN, OUTPUT);
 }
 
 void loop() {
-	// Revisamos si hay nuevas tarjetas  presentes
-	if ( mfrc522.PICC_IsNewCardPresent()) 
-        {  
-  		//Seleccionamos una tarjeta
-            if ( mfrc522.PICC_ReadCardSerial()) 
-            {
-                  // Enviamos serialemente su UID
-                  Serial.print("Card UID:");
-                  for (byte i = 0; i < mfrc522.uid.size; i++) {
-                          Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-                          Serial.print(mfrc522.uid.uidByte[i], HEX);   
-                  } 
-                  Serial.println();
-                  // Terminamos la lectura de la tarjeta  actual
-                  mfrc522.PICC_HaltA();         
-            }      
-	}	
+  delay(1000);
+
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  // Envía datos a Processing
+  Serial.print("T:");
+  Serial.print(temperature);
+  Serial.print(",H:");
+  Serial.println(humidity);
+
+  // Espera la instrucción de Processing para controlar los LEDs
+  while (Serial.available() > 0) {
+    char command = Serial.read();
+    if (command == 'A') {
+      digitalWrite(LED_TEMPERATURE_PIN, HIGH);
+    } else if (command == 'a') {
+      digitalWrite(LED_TEMPERATURE_PIN, LOW);
+    } else if (command == 'B') {
+      digitalWrite(LED_HUMIDITY_PIN, HIGH);
+    } else if (command == 'b') {
+      digitalWrite(LED_HUMIDITY_PIN, LOW);
+    }
+  }
 }
