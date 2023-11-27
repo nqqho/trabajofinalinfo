@@ -5,6 +5,17 @@
 
 DHT dht(DHTPIN, DHTTYPE);
 
+class SensorData {
+public:
+  float temperature;
+  float humidity;
+
+  void readData() {
+    temperature = dht.readTemperature();
+    humidity = dht.readHumidity();
+  }
+};
+
 const int LED_TEMPERATURE_PIN = 7;
 const int LED_HUMIDITY_PIN = 6;
 
@@ -18,14 +29,14 @@ void setup() {
 void loop() {
   delay(1000);
 
-  float temperature = dht.readTemperature();
-  float humidity = dht.readHumidity();
+  SensorData sensor;
+  sensor.readData();
 
   // Envía datos a Processing
   Serial.print("T:");
-  Serial.print(temperature);
+  Serial.print(sensor.temperature);
   Serial.print(",H:");
-  Serial.println(humidity);
+  Serial.println(sensor.humidity);
 
   // Espera la instrucción de Processing para controlar los LEDs
   while (Serial.available() > 0) {
