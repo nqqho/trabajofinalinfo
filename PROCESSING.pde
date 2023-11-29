@@ -33,7 +33,7 @@ void draw() {
 void serialEvent(Serial p) {
   String val = p.readStringUntil('\n');
   if (val != null) {
-    String[] pairs = splitTokens(val, ",");
+    String[] pairs = split(val, ",");
     for (String pair : pairs) {
       String[] keyValue = split(pair, ':');
       if (keyValue.length == 2) {
