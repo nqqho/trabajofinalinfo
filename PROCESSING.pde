@@ -52,15 +52,15 @@ void serialEvent(Serial p) {
 }
 
 void sendAutomaticCommands() {
-  // Envia 'A' si la temperatura es mayor a 25°C, 'a' de lo contrario
-  if (temperature > 31.0) {
+  // Envia 'A' si la temperatura es mayor a x°C, 'a' de lo contrario
+  if (temperature >30.0) {
     myPort.write('A');
   } else {
     myPort.write('a');
   }
 
-  // Envia 'B' si la humedad es mayor a 50%, 'b' de lo contrario
-  if (humidity > 50.0) {
+  // Envia 'B' si la humedad es mayor a x, 'b' de lo contrario
+  if (humidity > 40.0) {
     myPort.write('B');
   } else {
     myPort.write('b');
