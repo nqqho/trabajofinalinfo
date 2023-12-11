@@ -70,10 +70,6 @@ void loop() {
   Serial.print(",H:");
   Serial.println(currentHumidity);
 
-  // uso de los pines de LED
-  Serial.println("Temperature LED Pin: " + String(temperatureLEDPin));
-  Serial.println("Humidity LED Pin: " + String(humidityLEDPin));
-
   // Espera la instrucción de Processing para controlar los LEDs
   while (Serial.available() > 0) {
     char command = Serial.read();
