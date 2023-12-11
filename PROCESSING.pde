@@ -1,4 +1,6 @@
 import processing.serial.*;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 Serial myPort;
 float temperature = 0;
@@ -60,7 +62,7 @@ void sendAutomaticCommands() {
   }
 
   // Envia 'B' si la humedad es mayor a x, 'b' de lo contrario
-  if (humidity > 40.0) {
+  if (humidity > 32.0) {
     myPort.write('B');
   } else {
     myPort.write('b');
@@ -82,10 +84,21 @@ void updateAveragesAndSave() {
 
 void saveAveragesToFile(float avgTemperature, float avgHumidity) {
   try {
+    // Obtener la fecha y hora actual
+    Date now = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String dateTime = dateFormat.format(now);
+
+    // Abrir el archivo para escritura
     PrintWriter output = createWriter("promedios.txt");
-    output.println("Average - Temperature: " + nf(avgTemperature, 2, 1) + " °C, Humidity: " + nf(avgHumidity, 2, 1) + " %");
+
+    // Escribir los datos junto con la fecha y hora
+    output.println("DateTime: " + dateTime + ", Average - Temperature: " + nf(avgTemperature, 2, 1) + " °C, Humidity: " + nf(avgHumidity, 2, 1) + " %");
+
+    // Cerrar el archivo
     output.flush();
     output.close();
+
     println("Processing: File closed");
   } catch (Exception e) {
     e.printStackTrace();
