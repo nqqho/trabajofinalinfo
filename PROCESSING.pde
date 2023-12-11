@@ -117,7 +117,7 @@ void guardarPromediosEnArchivo(float promedioTemperatura, float promedioHumedad)
   try {
     // Obtener la fecha y hora actual
     Date ahora = new Date();
-    SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     String fechaHora = formatoFecha.format(ahora);
 
     // Abrir el archivo para escritura
