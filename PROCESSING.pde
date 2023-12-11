@@ -11,7 +11,7 @@ int contador = 0;
 
 void setup() {
   // Configura el tamaño de la ventana de dibujo
-  size(260, 200);
+  size(260, 100);
   
   // Especifica el nombre del puerto al que está conectado tu dispositivo Arduino
   String nombrePuerto = "COM6";  // Cambia esto al puerto correcto
@@ -27,7 +27,11 @@ void setup() {
 void draw() {
   // Establece el fondo blanco
   background(255);  
-  
+   fill (100);
+  rect(250, height -100 ,10, 100);
+  rect(0, height -100 ,10, 100);
+
+
   // Dibuja rectángulos que representan la temperatura y la humedad en la pantalla
   fill(255, 0, 0);
   rect(50, height - temperatura, 50, temperatura);
