@@ -18,25 +18,15 @@ public:
     humidity = dht.readHumidity();
   }
 
-  // Métodos get y set para la temperatura
+  // Método get para la temperatura
   float getTemperature() const {
     return temperature;
   }
-
-  void setTemperature(float newTemperature) {
-    temperature = newTemperature;
-  }
-
-  // Métodos get y set para la humedad
+  // Método get para la humedad
   float getHumidity() const {
     return humidity;
   }
-
-  void setHumidity(float newHumidity) {
-    humidity = newHumidity;
-  }
-
-  // Métodos get para los pines de LED
+  // Método get para los pines de LED
   int getTemperatureLEDPin() const {
     return LED_TEMPERATURE_PIN;
   }
