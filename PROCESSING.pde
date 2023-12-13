@@ -50,25 +50,27 @@ void draw() {
 
 void serialEvent(Serial p) {
   // Lee la cadena de datos hasta el salto de línea
-  String val = p.readStringUntil('\n');
+  String INPUT = p.readStringUntil('\n');
   
   // Verifica si se recibieron datos
-  if (val != null) {
+  if (INPUT != null) {
     // Divide la cadena en pares clave-valor separados por comas
-    String[] pares = split(val, ",");
+    String[] pares = split(INPUT, ",");
     
     // Itera sobre los pares clave-valor
-    for (String par : pares) {
+    for (int i = 0; i < pares.length; i++) {
+      String par = pares[i];  //temporal
+      
       // Divide cada par en clave y valor
-      String[] claveValor = split(par, ':');
+      String[] claveValor = split(par, ':');  //0 es clave 1 es dato
       
       // Verifica si el par tiene dos elementos
       if (claveValor.length == 2) {
         // Actualiza las variables de temperatura y humedad según los datos recibidos
         if (claveValor[0].equals("T")) {
-          temperatura = float(claveValor[1]);
+          temperatura = float(claveValor[1]); 
         } else if (claveValor[0].equals("H")) {
-          humedad = float(claveValor[1]);
+          humedad = float(claveValor[1]); 
         }
       }
     }
